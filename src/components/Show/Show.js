@@ -8,21 +8,16 @@ export default class Show extends Component {
     showId: ''
   };
 
-  async componentDidUpdate() {
-    const { state, props } = this;
-
-    if (props.showId !== state.showId) {
+  async componentDidUpdate(prevProps) {    
+    const { props } = this;
+    
+    if (props.showId !== prevProps.showId) {
       const data = await getShowInfo(props.showId);
 
-      this.setState(
-        {
-          data,
-          showId: props.showId
-        },
-        () => {
-          console.log('STATE===>', this.state);
-        }
-      );
+      this.setState({
+        data,
+        showId: props.showId
+      });
     }
   }
 
@@ -32,7 +27,7 @@ export default class Show extends Component {
 
   render() {
     const { data, showId } = this.state;
-    if (!showId)
+    if (!showId || !data)
       return <p className="show-inforation t-show-info">Шоу не выбрано</p>;
     return (
       <div className="show">
